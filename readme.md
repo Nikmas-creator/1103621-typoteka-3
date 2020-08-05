@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Никита Маслов](https://up.htmlacademy.ru/nodejs/3/user/1103621).
-* Наставник: `Неизвестно`.
+* Наставник: `Bodya Tsap`.
 
 ---
 
