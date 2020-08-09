@@ -6,7 +6,7 @@ const {
 } = require(`../../utils`);
 const _ = require(`lodash`);
 const chalk = require(`chalk`);
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const {
   ExitCode
 } = require(`../../constants`);
@@ -97,7 +97,7 @@ const generateArticles = (count) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     let articlesCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
@@ -108,14 +108,13 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    fs.writeFile(FILE_NAME, JSON.stringify(generateArticles(articlesCount)), (err) => {
-      if (err) {
-        console.error(chalk.red(`Can't write data to file...`));
-        process.exit(ExitCode.error);
-      }
-
-      console.log(`Operation success. File created.`);
+    try {
+      await fs.writeFile(FILE_NAME, JSON.stringify(generateArticles(articlesCount)));
+      console.log(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
-    });
+    } catch (err) {
+      console.error(chalk.red(`Can't write data to file: ${err}`));
+      process.exit(ExitCode.error);
+    }
   }
 };
