@@ -66,6 +66,13 @@ const CATEGORIES = [
   `Железо`
 ];
 
+function getRandomDateInRangeOfThreeMonths() {
+  const currentDate = new Date();
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+  return moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm:ss`);
+}
+
 const generateArticles = (count) => {
   let articles = [];
 
@@ -74,10 +81,7 @@ const generateArticles = (count) => {
     const differenceArray = shuffle(_.difference(SENTENCES, announce));
     const fulltext = differenceArray.slice(getRandomInt(1, differenceArray.length - 2)).join(` `);
 
-    const currentDate = new Date();
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
-    const createdDate = moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm:ss`);
+    const createdDate = getRandomDateInRangeOfThreeMonths();
 
     articles.push({
       title: TITLES[getRandomInt(0, TITLES.length - 1)],
