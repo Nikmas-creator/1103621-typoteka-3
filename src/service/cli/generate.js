@@ -10,6 +10,7 @@ const fs = require(`fs`);
 const {
   ExitCode
 } = require(`../../constants`);
+const moment = require(`moment`);
 
 const FILE_NAME = `mocks.json`;
 
@@ -31,26 +32,26 @@ const TITLES = [
 ];
 
 const SENTENCES = [
-  `Ёлки— это не просто красивое дерево.Это прочная древесина.`,
+  `Ёлки— это не просто красивое дерево. Это прочная древесина.`,
   `Первая большая ёлка была установлена только в 1938 году.`,
-  `Вы можете достичь всего.Стоит только немного постараться и запастись книгами.`,
-  `Этот смартфон— настоящая находка.Большой и яркий экран, мощнейший процессор— всё это в небольшом гаджете.`,
-  `Золотое сечение— соотношение двух величин, гармоническая пропорция.`,
+  `Вы можете достичь всего. Стоит только немного постараться и запастись книгами.`,
+  `Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор— всё это в небольшом гаджете.`,
+  `Золотое сечение — соотношение двух величин, гармоническая пропорция.`,
   `Собрать камни бесконечности легко, если вы прирожденный герой.`,
-  `Освоить вёрстку несложно.Возьмите книгу новую книгу и закрепите все упражнения на практике.`,
-  `Бороться с прокрастинацией несложно.Просто действуйте.Маленькими шагами.`,
+  `Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике.`,
+  `Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами.`,
   `Программировать не настолько сложно, как об этом говорят.`,
   `Простые ежедневные упражнения помогут достичь успеха.`,
   `Это один из лучших рок - музыкантов.`,
   `Он написал больше 30 хитов.`,
   `Из под его пера вышло 8 платиновых альбомов.`,
-  `Процессор заслуживает особого внимания.Он обязательно понравится геймерам со стажем.`,
-  `Рок - музыка всегда ассоциировалась с протестами.Так ли это на самом деле ?`,
+  `Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
+  `Рок - музыка всегда ассоциировалась с протестами. Так ли это на самом деле ?`,
   `Достичь успеха помогут ежедневные повторения.`,
   `Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
-  `Как начать действовать ? Для начала просто соберитесь.`,
-  `Игры и программирование разные вещи.Не стоит идти в программисты, если вам нравится только игры.`,
-  `Альбом стал настоящим открытием года.Мощные гитарные рифы и скоростные соло - партии не дадут заскучать.`
+  `Как начать действовать? Для начала просто соберитесь.`,
+  `Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравится только игры.`,
+  `Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло - партии не дадут заскучать.`
 ];
 
 const CATEGORIES = [
@@ -69,22 +70,14 @@ const generateArticles = (count) => {
   let articles = [];
 
   for (let i = 0; i < count; i++) {
-    const announce = shuffle(SENTENCES).slice(0, 5);
+    const announce = shuffle(SENTENCES).slice(0, 5).join(` `);
     const differenceArray = shuffle(_.difference(SENTENCES, announce));
-    const fulltext = differenceArray.slice(getRandomInt(1, differenceArray.length - 2));
+    const fulltext = differenceArray.slice(getRandomInt(1, differenceArray.length - 2)).join(` `);
 
     const currentDate = new Date();
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
-
-    const randomDate = new Date(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime()));
-    const year = randomDate.getFullYear();
-    const month = randomDate.getMonth().toString().padStart(2, `0`);
-    const day = randomDate.getDate().toString().padStart(2, `0`);
-    const hours = randomDate.getHours().toString().padStart(2, `0`);
-    const minutes = randomDate.getMinutes().toString().padStart(2, `0`);
-    const seconds = randomDate.getSeconds().toString().padStart(2, `0`);
-    const createdDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    const createdDate = moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm:ss`);
 
     articles.push({
       title: TITLES[getRandomInt(0, TITLES.length - 1)],
