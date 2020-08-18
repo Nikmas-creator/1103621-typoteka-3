@@ -1,5 +1,6 @@
 'use strict';
 
+const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
 const {
   HttpCode
@@ -24,7 +25,7 @@ module.exports = {
         const mocks = JSON.parse(fileContent);
         res.json(mocks);
       } catch (err) {
-        res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
+        res.json([]);
       }
     });
 
@@ -32,6 +33,12 @@ module.exports = {
       .status(HttpCode.NOT_FOUND)
       .send(`Not found`));
 
-    app.listen(port);
+    app.listen(port, (err) => {
+      if (err) {
+        return console.error(chalk.red(`Ошибка при создании сервера: ${err}`));
+      }
+
+      return console.info(chalk.green(`Ожидаю соединений на ${port}`));
+    });
   }
 };
