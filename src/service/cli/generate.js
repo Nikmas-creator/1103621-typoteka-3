@@ -11,7 +11,10 @@ const {
   ExitCode
 } = require(`../../constants`);
 const moment = require(`moment`);
-const os = require(`os`);
+const {nanoid} = require(`nanoid`);
+
+const MAX_ID_LENGTH = 6;
+const MAX_COMMENTS = 4;
 
 const FILE_NAME = `mocks.json`;
 
@@ -20,6 +23,7 @@ const DEFAULT_COUNT = 1;
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
+const FILE_COMMENTS_PATH = `./data/comments.txt`;
 
 function getRandomDateInRangeOfThreeMonths() {
   const currentDate = new Date();
@@ -28,7 +32,16 @@ function getRandomDateInRangeOfThreeMonths() {
   return moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm:ss`);
 }
 
-const generateArticles = (count, titles, sentences, categories) => {
+const generateComments = (count, comments) => (
+  Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    text: shuffle(comments)
+      .slice(0, getRandomInt(1, 3))
+      .join(` `),
+  }))
+);
+
+const generateArticles = (count, titles, sentences, categories, comments) => {
   let articles = [];
 
   for (let i = 0; i < count; i++) {
@@ -39,8 +52,10 @@ const generateArticles = (count, titles, sentences, categories) => {
     const createdDate = getRandomDateInRangeOfThreeMonths();
 
     articles.push({
+      id: nanoid(MAX_ID_LENGTH),
       title: titles[getRandomInt(0, titles.length - 1)],
       announce,
+      comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
       fulltext,
       createdDate,
       category: shuffle(categories).slice(getRandomInt(1, categories.length - 2))
@@ -53,7 +68,7 @@ const generateArticles = (count, titles, sentences, categories) => {
 const readContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, `utf8`);
-    return content.split(os.EOL);
+    return content.trim().replace(/\r/g, ``).split(`\n`);
   } catch (error) {
     console.error(chalk.red(error));
     return [];
@@ -63,6 +78,7 @@ const readContent = async (filePath) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
+    const comments = await readContent(FILE_COMMENTS_PATH);
     const titles = await readContent(FILE_TITLES_PATH);
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
@@ -78,7 +94,7 @@ module.exports = {
     }
 
     try {
-      await fs.writeFile(FILE_NAME, JSON.stringify(generateArticles(articlesCount, titles, sentences, categories)));
+      await fs.writeFile(FILE_NAME, JSON.stringify(generateArticles(articlesCount, titles, sentences, categories, comments)));
       console.log(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
     } catch (err) {
