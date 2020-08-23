@@ -25,18 +25,12 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
-    try {
-      app.listen(port, (err) => {
-        if (err) {
-          return console.error(`Ошибка при создании сервера`, err);
-        }
-
-        return console.info(chalk.green(`Ожидаю соединений на ${port}`));
-      });
-
-    } catch (err) {
-      console.error(`Произошла ошибка: ${err.message}`);
+    app.listen(port, () => {
+      console.info(chalk.green(`Ожидаю соединений на ${port}`));
+    })
+    .on(`error`, (err) => {
+      console.error(chalk.red(`Произошла ошибка: ${err}`));
       process.exit(1);
-    }
+    });
   }
 };

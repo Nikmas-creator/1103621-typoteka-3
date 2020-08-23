@@ -18,14 +18,8 @@ module.exports = (app, articleService, commentService) => {
     res.status(HttpCode.OK).json(articles);
   });
 
-  route.get(`/:articleId`, (req, res) => {
-    const {articleId} = req.params;
-    const article = articleService.findOne(articleId);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`The article with the id ${articleId} is not found!`);
-    }
+  route.get(`/:articleId`, articleExists(articleService), (req, res) => {
+    const {article} = res.locals;
 
     return res.status(HttpCode.OK)
       .json(article);
@@ -38,14 +32,8 @@ module.exports = (app, articleService, commentService) => {
       .json(newArticle);
   });
 
-  route.put(`/:articleId`, articleValidator, (req, res) => {
+  route.put(`/:articleId`, [articleValidator, articleExists(articleService)], (req, res) => {
     const {articleId} = req.params;
-    const existingArticle = articleService.findOne(articleId);
-
-    if (!existingArticle) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`The article with the id ${articleId} is not found!`);
-    }
 
     const updatedArticle = articleService.update(articleId, req.body);
 
