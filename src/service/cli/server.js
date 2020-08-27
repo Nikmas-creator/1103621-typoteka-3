@@ -1,36 +1,54 @@
 'use strict';
 
-const chalk = require(`chalk`);
 const {
   HttpCode,
   API_PREFIX
 } = require(`../../constants`);
 const express = require(`express`);
 const routes = require(`../api`);
+const startRequest = require(`../../logger/middlewares/start-request`);
+const {
+  getLogger
+} = require(`../../logger/logger`);
+
+const logger = getLogger();
 
 const DEFAULT_PORT = 3000;
 
 const app = express();
 
-app.use(express.json());
-app.use(API_PREFIX, routes);
 
-app.use((req, res) => res
-  .status(HttpCode.NOT_FOUND)
-  .send(`The page is not found!`));
+const init = async () => {
+  app.use(express.json());
+  app.use(startRequest);
+  app.use(API_PREFIX, await routes());
+
+  app.use((req, res) => {
+    res
+      .status(HttpCode.NOT_FOUND)
+      .send(`The page is not found!`);
+
+    logger.error(`Such a route doesn't exist: ${req.url}`);
+  });
+
+  return app;
+};
 
 module.exports = {
   name: `--server`,
-  run(args) {
+  init,
+  async run(args) {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
+    await init();
+
     app.listen(port, () => {
-      console.info(chalk.green(`Ожидаю соединений на ${port}`));
+      logger.info(`Wait for connections on port ${port}`);
     })
-    .on(`error`, (err) => {
-      console.error(chalk.red(`Произошла ошибка: ${err}`));
-      process.exit(1);
-    });
+      .on(`error`, (err) => {
+        logger.error(`Error: ${err}`);
+        process.exit(1);
+      });
   }
 };
