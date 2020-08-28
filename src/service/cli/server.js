@@ -6,12 +6,13 @@ const {
 } = require(`../../constants`);
 const express = require(`express`);
 const routes = require(`../api`);
-const startRequest = require(`../../logger/middlewares/start-request`);
 const {
   getLogger
 } = require(`../../logger/logger`);
-
 const logger = getLogger();
+const expressPinoLogger = require(`express-pino-logger`)({
+  logger
+});
 
 const DEFAULT_PORT = 3000;
 
@@ -20,7 +21,7 @@ const app = express();
 
 const init = async () => {
   app.use(express.json());
-  app.use(startRequest);
+  app.use(expressPinoLogger);
   app.use(API_PREFIX, await routes());
 
   app.use((req, res) => {
