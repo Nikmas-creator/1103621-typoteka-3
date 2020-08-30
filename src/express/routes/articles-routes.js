@@ -45,7 +45,7 @@ articlesRouter.get(`/category/:id`, (req, res) => res.render(`posts/articles-by-
 articlesRouter.get(`/add`, (req, res) => res.render(`posts/new-post`));
 
 articlesRouter.post(`/add`, async (req, res) => {
-  console.log(req.fields);
+  console.log(`Fields: ${JSON.stringify(req.fields)}`);
   const AVATARS_PATH = `src/express/public/img/`;
   const {
     type,

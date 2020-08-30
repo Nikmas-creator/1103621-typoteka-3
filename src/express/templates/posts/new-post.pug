@@ -13,7 +13,7 @@ block content
                 .new-publication__date-form-division
                   .new-publication__date-block
                     label(for='new-publication-date', aria-label='Календарь')
-                    input#new-publication-date(type='text', name='createdDate', placeholder='21.03.2019' value=`${fields && fields.createdDate ? fields.createdDate : `21.03.2019`}`)
+                    input#new-publication-date(type='text', name='createdDate', placeholder='21.03.2019', value=`${fields && fields.createdDate ? fields.createdDate : `21.03.2019`}`)
               button.new-publication__button.button.button--colored(type='submit') Опубликовать
             button.popup__button.button.button--popup-close(type='button', aria-label='Закрыть окно')
               | Закрыть
@@ -34,11 +34,11 @@ block content
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text
                   label
-                    textarea(rows='1', placeholder='Анонс публикации', name='announce')
+                    textarea(rows='1', placeholder='Анонс публикации', name='announce', required)
                       | #{fields && fields.announce ? fields.announce : ``}
                 .form__field.form__field--publication-text
                   label
-                    textarea(rows='1', placeholder='Полный текст публикации', name='fulltext')
+                    textarea(rows='1', placeholder='Полный текст публикации', name='fulltext', required)
                       | #{fields && fields.fulltext ? fields.fulltext : ``}
       .modal__overlay
 
