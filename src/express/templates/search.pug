@@ -5,8 +5,16 @@ block content
     section.search-page
       .search-page__wrapper
         h1 Поиск
-        .search.search-page__form
-          form(action='#', method='get')
+        div(class=`search  search-page__form  ${articles && articles.length === 0  ? `search-page__wrapper--empty` : ``}`)
+          form(action='/search', method='post')
             label
-              input(type='text', placeholder='Что ищем?')
+              input(type='text', placeholder='Что ищем?', name='search')
             button.search__button.button.button--transparent(type='submit') Найти
+          if articles && articles.length > 0
+            each article in articles
+              .search__result
+                time.search__date(datetime=`${article.createdDate.replace(/\s/, `T`)}`) #{article.createdDate.replace(/-/g, `.`).replace(/\s/, `, `)}
+                a.search__link
+                  | #{article.title}
+        if articles && articles.length === 0
+          p.search-page__empty Ничего не нашлось

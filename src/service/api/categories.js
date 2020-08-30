@@ -7,7 +7,7 @@ const {
   HttpCode
 } = require(`../../constants`);
 
-const {getLogger} = require(`../../logger/logger`);
+const {getLogger} = require(`../../logger/backend-logger`);
 const logger = getLogger();
 
 const route = new Router();

@@ -10,7 +10,8 @@
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000",
     "start::debug": "cross-env LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000",
     "server": "nodemon ./src/service/service.js --server 3000",
-    "start-front-server": "nodemon ./src/express/index.js"
+    "start-front-server": "nodemon ./src/express/index.js",
+    "generate-mocks": "node ./src/service/service.js --generate 10"
   },
   "repository": {
     "type": "git",
@@ -31,13 +32,15 @@
     "supertest": "4.0.2"
   },
   "dependencies": {
+    "axios": "0.20.0",
     "cross-env": "7.0.2",
     "express": "4.17.1",
+    "express-formidable": "1.2.0",
     "express-pino-logger": "5.0.0",
     "lodash": "4.17.19",
     "moment": "2.27.0",
     "nanoid": "3.1.12",
     "pino": "6.5.1",
-    "pug": "3.0.0"
+    "pug": "2.0.4"
   }
 }

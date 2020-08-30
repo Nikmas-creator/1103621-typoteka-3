@@ -29,7 +29,7 @@ function getRandomDateInRangeOfThreeMonths() {
   const currentDate = new Date();
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
-  return moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm:ss`);
+  return moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm`);
 }
 
 const generateComments = (count, comments) => (
@@ -45,7 +45,7 @@ const generateArticles = (count, titles, sentences, categories, comments) => {
   let articles = [];
 
   for (let i = 0; i < count; i++) {
-    const announce = shuffle(sentences).slice(0, 5).join(` `);
+    const announce = shuffle(sentences).slice(0, 3).join(` `);
     const differenceArray = shuffle(_.difference(sentences, announce));
     const fulltext = differenceArray.slice(getRandomInt(1, differenceArray.length - 2)).join(` `);
 
@@ -58,7 +58,7 @@ const generateArticles = (count, titles, sentences, categories, comments) => {
       comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
       fulltext,
       createdDate,
-      category: shuffle(categories).slice(getRandomInt(1, categories.length - 2))
+      category: shuffle(categories).slice(0, getRandomInt(1, 4))
     });
   }
 

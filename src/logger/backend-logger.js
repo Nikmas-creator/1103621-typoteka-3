@@ -1,8 +1,8 @@
 'use strict';
 
 const logger = require(`pino`)({
-  name: `server`,
-  level: process.env.LOG_LEVEL || `info`
+  name: `backend-server`,
+  level: process.env.LOG_LEVEL || `info`,
 }, `./src/service/logs/logs.log`);
 
 module.exports = {
@@ -11,4 +11,3 @@ module.exports = {
     return logger.child(options);
   }
 };
-

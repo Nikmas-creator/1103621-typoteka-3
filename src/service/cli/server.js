@@ -8,7 +8,7 @@ const express = require(`express`);
 const routes = require(`../api`);
 const {
   getLogger
-} = require(`../../logger/logger`);
+} = require(`../../logger/backend-logger`);
 const logger = getLogger();
 const expressPinoLogger = require(`express-pino-logger`)({
   logger
