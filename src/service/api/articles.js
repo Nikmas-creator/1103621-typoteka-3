@@ -8,9 +8,6 @@ const {
   commentValidator
 } = require(`../middlewares`);
 
-const {getLogger} = require(`../../logger/backend-logger`);
-const logger = getLogger();
-
 const route = new Router();
 
 module.exports = (app, articleService, commentService) => {
@@ -19,8 +16,6 @@ module.exports = (app, articleService, commentService) => {
   route.get(`/`, (req, res) => {
     const articles = articleService.findAll();
     res.status(HttpCode.OK).json(articles);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
   route.get(`/:articleId`, articleExists(articleService), (req, res) => {
@@ -28,8 +23,6 @@ module.exports = (app, articleService, commentService) => {
 
     res.status(HttpCode.OK)
       .json(article);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
   route.post(`/`, articleValidator, (req, res) => {
@@ -37,8 +30,6 @@ module.exports = (app, articleService, commentService) => {
 
     res.status(HttpCode.CREATED)
       .json(newArticle);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
   route.put(`/:articleId`, [articleValidator, articleExists(articleService)], (req, res) => {
@@ -48,8 +39,6 @@ module.exports = (app, articleService, commentService) => {
 
     res.status(HttpCode.OK)
       .json(updatedArticle);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
   route.delete(`/:articleId`, (req, res) => {
@@ -59,8 +48,6 @@ module.exports = (app, articleService, commentService) => {
     if (!deletedArticle) {
       res.status(HttpCode.NOT_FOUND)
         .send(`The article with the id ${articleId} is not found!`);
-
-      logger.info(`End request with status code ${res.statusCode}`);
 
       return;
     }
@@ -75,8 +62,6 @@ module.exports = (app, articleService, commentService) => {
 
     res.status(HttpCode.OK)
       .json(comments);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
   route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), (req, res) => {
@@ -87,8 +72,6 @@ module.exports = (app, articleService, commentService) => {
     if (!deletedComment) {
       res.status(HttpCode.NOT_FOUND)
         .send(`Comment with id ${commentId} is not found!`);
-
-      logger.info(`End request with status code ${res.statusCode}`);
 
       return;
     }
@@ -103,8 +86,6 @@ module.exports = (app, articleService, commentService) => {
 
     res.status(HttpCode.CREATED)
       .json(newComment);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 
 };

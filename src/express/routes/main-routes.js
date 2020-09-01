@@ -47,17 +47,18 @@ mainRouter.get(`/`, async (req, res) => {
 
 });
 mainRouter.get(`/login`, (req, res) => res.render(`entry/login`));
+
 mainRouter.get(`/search`, async (req, res) => {
-  res.render(`search`);
+  if (req.query.search) {
+    const articles = await findArticlesByQueryString(req.query.search);
+    res.render(`search`, {
+      articles
+    });
+  } else {
+    res.render(`search`);
+  }
 });
-mainRouter.post(`/search`, async (req, res) => {
-  // console.log(`req.fields: ${JSON.stringify(req.fields.search)}`);
-  const articles = await findArticlesByQueryString(req.fields.search);
-  // console.log(`${JSON.stringify(articles)}`);
-  res.render(`search`, {
-    articles
-  });
-});
+
 mainRouter.get(`/categories`, (req, res) => res.render(`all-categories`));
 mainRouter.get(`/register`, (req, res) => res.render(`entry/sign-up`));
 

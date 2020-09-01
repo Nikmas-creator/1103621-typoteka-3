@@ -7,9 +7,6 @@ const {
   HttpCode
 } = require(`../../constants`);
 
-const {getLogger} = require(`../../logger/backend-logger`);
-const logger = getLogger();
-
 const route = new Router();
 
 module.exports = (app, service) => {
@@ -17,10 +14,7 @@ module.exports = (app, service) => {
 
   route.get(`/`, (req, res) => {
     const categories = service.findAll();
-
     res.status(HttpCode.OK)
       .json(categories);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 };
