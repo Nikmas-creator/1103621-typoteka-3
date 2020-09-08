@@ -5,6 +5,10 @@ const {
 } = require(`express`);
 const fs = require(`fs`).promises;
 const axios = require(`axios`);
+const {
+  getLogger
+} = require(`../logger/frontend-logger`);
+const logger = getLogger();
 
 const PATH_TO_SERVICE = `http://localhost:3000`;
 
@@ -16,7 +20,6 @@ const postArticle = async (article) => {
     response = await axios.post(`${PATH_TO_SERVICE}/api/articles`, article);
     return response;
   } catch (error) {
-    console.log(error);
     response.status = 400;
     return response;
   }
@@ -36,8 +39,6 @@ const normalizeArticle = ((bodyOffer) => {
     picture
   };
 
-  console.log(`Normalized article: ${JSON.stringify(normalizedArticle)}`);
-
   return normalizedArticle;
 });
 
@@ -45,7 +46,6 @@ articlesRouter.get(`/category/:id`, (req, res) => res.render(`posts/articles-by-
 articlesRouter.get(`/add`, (req, res) => res.render(`posts/new-post`));
 
 articlesRouter.post(`/add`, async (req, res) => {
-  console.log(`Fields: ${JSON.stringify(req.fields)}`);
   const AVATARS_PATH = `src/express/public/upload/`;
   const {
     type,
@@ -57,9 +57,7 @@ articlesRouter.post(`/add`, async (req, res) => {
 
   if (size === 0 || !allowTypes.includes(type)) {
     fs.unlink(path);
-    console.log(`Object to render: ${JSON.stringify({
-      fields: req.fields
-    })}`);
+
     res.render(`posts/new-post`, {
       fields: req.fields
     });
@@ -70,7 +68,7 @@ articlesRouter.post(`/add`, async (req, res) => {
   try {
     await fs.rename(path, AVATARS_PATH + name);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 
   const response = await postArticle(normalizeArticle({

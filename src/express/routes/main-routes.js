@@ -7,6 +7,10 @@ const axios = require(`axios`);
 const {
   shuffle
 } = require(`../../utils`);
+const {
+  getLogger
+} = require(`../logger/frontend-logger`);
+const logger = getLogger();
 
 const mainRouter = new Router();
 
@@ -17,7 +21,7 @@ const getAllArticles = async () => {
     const serviceResp = await axios.get(`${PATH_TO_SERVICE}/api/articles`);
     return serviceResp.data;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return [];
   }
 };

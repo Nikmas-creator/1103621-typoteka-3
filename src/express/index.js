@@ -46,7 +46,7 @@ app.use((err, req, res, next) => {
     .status(500)
     .render(`errors/500`);
 
-  console.log(err);
+  logger.error(err);
   next();
 });
 
