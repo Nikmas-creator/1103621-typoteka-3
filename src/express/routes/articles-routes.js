@@ -7,7 +7,7 @@ const fs = require(`fs`).promises;
 const axios = require(`axios`);
 const {
   getLogger
-} = require(`../logger/frontend-logger`);
+} = require(`../../logger/frontend-logger`);
 const logger = getLogger();
 
 const PATH_TO_SERVICE = `http://localhost:3000`;

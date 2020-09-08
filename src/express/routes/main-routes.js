@@ -9,7 +9,7 @@ const {
 } = require(`../../utils`);
 const {
   getLogger
-} = require(`../logger/frontend-logger`);
+} = require(`../../logger/frontend-logger`);
 const logger = getLogger();
 
 const mainRouter = new Router();
