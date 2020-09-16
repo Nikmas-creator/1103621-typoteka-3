@@ -1,5 +1,4 @@
 extends ../layout.pug 
-
 block content 
   main
     section.modal.modal--flex
@@ -30,7 +29,12 @@ block content
                     label
                       input.visually-hidden(type='file', name='picture')
                       | Обзор
-                a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
+                  button.button.button--transparent Удалить
+                each category in fields.allCategories
+                  .new-publication__checkbox.new-publication__checkbox--auto
+                    input(type='checkbox', name='checkbox-auto', id=`${category}`, value=`${category}`)
+                    label(for=`${category}`) #{category}  
+                a.new-publication__form-link.button.button--transparent(href='/categories') Добавить категорию
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text
                   label
@@ -41,7 +45,6 @@ block content
                     textarea(rows='1', placeholder='Полный текст публикации', name='fulltext', required)
                       | #{fields && fields.fulltext ? fields.fulltext : ``}
       .modal__overlay
-
 block scripts 
   script(src='/js/vendor.js')
   script(src='/js/main.js')

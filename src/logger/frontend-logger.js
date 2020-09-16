@@ -3,7 +3,7 @@
 const logger = require(`pino`)({
   name: `frontend-server`,
   level: process.env.LOG_LEVEL || `info`,
-}, `./src/service/logs/logs.log`);
+}, `./src/express/logs/logs.log`);
 
 module.exports = {
   logger,
