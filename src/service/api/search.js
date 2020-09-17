@@ -3,9 +3,6 @@
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
 
-const {getLogger} = require(`../../logger/logger`);
-const logger = getLogger();
-
 const route = new Router();
 
 module.exports = (app, service) => {
@@ -18,8 +15,6 @@ module.exports = (app, service) => {
       res.status(HttpCode.BAD_REQUEST)
         .json([]);
 
-      logger.info(`End request with status code ${res.statusCode}`);
-
       return;
     }
 
@@ -28,7 +23,5 @@ module.exports = (app, service) => {
 
     res.status(searchStatus)
       .json(searchResults);
-
-    logger.info(`End request with status code ${res.statusCode}`);
   });
 };
