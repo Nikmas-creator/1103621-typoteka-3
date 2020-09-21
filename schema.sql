@@ -16,12 +16,13 @@ DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-	id BIGSERIAL NOT NULL PRIMARY KEY,
+	id BIGSERIAL NOT NULL,
   email varchar(100) NOT NULL,
 	firstname VARCHAR(100) NOT NULL,
 	lastname VARCHAR(100) NOT NULL,
 	user_password varchar(100) NOT NULL,
-	avatar varchar(100) NOT NULL
+	avatar varchar(100) NOT NULL,
+  CONSTRAINT user_pk PRIMARY KEY (id, email)
 );
 
 CREATE TABLE articles (
@@ -58,14 +59,17 @@ CREATE TABLE comments (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	content text NOT NULL,
 	author_id bigint NOT NULL,
+  author_email varchar(100) NOT NULL,
   article_id bigint NOT NULL,
   FOREIGN KEY (article_id) REFERENCES articles (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  FOREIGN KEY (author_id) REFERENCES users (id)
+  FOREIGN KEY (author_id, author_email) REFERENCES users (id, email)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
+
 
 
 
