@@ -80,13 +80,6 @@ const getSqlForFillingUsersTable = (users) => {
 
 const getPictureFileName = (number) => `item${number.toString().padStart(2, 0)}.jpg`;
 
-function getRandomDateInRangeOfThreeMonths() {
-  const currentDate = new Date();
-  const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
-  return moment(getRandomInt(threeMonthsAgo.getTime(), currentDate.getTime())).format(`YYYY-MM-DD HH:mm`);
-}
-
 const generateArticle = (titles, sentences) => {
   const announce = shuffle(sentences).slice(0, 3).join(` `);
   const differenceArray = shuffle(_.difference(sentences, announce));
@@ -96,7 +89,6 @@ const generateArticle = (titles, sentences) => {
     id: `DEFAULT`,
     announce,
     wholetext,
-    releaseDate: getRandomDateInRangeOfThreeMonths(),
     picture: getPictureFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),
     title: titles[getRandomInt(0, titles.length - 1)],
   };
@@ -110,12 +102,12 @@ const getSqlForFillingArticlesTable = (
 
   for (let i = 0; i < numberOfFirstUserArticles; i++) {
     const article = generateArticle(titles, sentences);
-    sqlForFillingArticlesTable += `(${article.id}, '${article.title}', '${article.releaseDate}', '${article.announce}', '${article.wholetext}', '${article.picture}', 1),\n`;
+    sqlForFillingArticlesTable += `(${article.id}, '${article.title}', '${article.announce}', '${article.wholetext}', '${article.picture}', 1),\n`;
   }
 
   for (let i = 0; i < numberOfSecondUserArticles; i++) {
     const article = generateArticle(titles, sentences);
-    sqlForFillingArticlesTable += `(${article.id}, '${article.title}', '${article.releaseDate}', '${article.announce}', '${article.wholetext}', '${article.picture}', 1),\n`;
+    sqlForFillingArticlesTable += `(${article.id}, '${article.title}', '${article.announce}', '${article.wholetext}', '${article.picture}', 1),\n`;
   }
 
   return sqlForFillingArticlesTable.substring(0, sqlForFillingArticlesTable.length - 2) + `;\n\n`;

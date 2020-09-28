@@ -26,26 +26,23 @@ CREATE TABLE users (
 CREATE UNIQUE INDEX users_email_index ON users (email);
 CREATE INDEX users_firstname_index ON users (firstname);
 CREATE INDEX users_lastname_index ON users (lastname);
-CREATE INDEX users_user_password_index ON users (user_password);
-CREATE INDEX users_avatar_index ON users (avatar);
 
 CREATE TABLE articles (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	title varchar(100) NOT NULL,
-	release_date date NOT NULL,
   announce text NOT NULL,
   wholetext text NOT NULL,
   picture varchar(100) NOT NULL,
   author_id BIGINT NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (author_id) REFERENCES users (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
 CREATE INDEX users_title_index ON articles (title);
-CREATE INDEX users_release_date_index ON articles (release_date);
+CREATE INDEX users_creation_date_index ON articles (creation_date);
 CREATE INDEX users_announce_index ON articles (announce);
 CREATE INDEX users_wholetext_index ON articles (wholetext);
-CREATE INDEX users_picture_index ON articles (picture);
 
 CREATE TABLE categories (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
@@ -64,7 +61,7 @@ CREATE TABLE articles_categories (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
-CREATE INDEX articles_categories_articles_id_index ON articles_categories (articles_id);
+CREATE INDEX articles_categories_articles_id_index ON articles_categories (article_id);
 CREATE INDEX articles_categories_category_id_index ON articles_categories (category_id);
 
 CREATE TABLE comments (
@@ -72,6 +69,7 @@ CREATE TABLE comments (
 	content text NOT NULL,
 	author_id bigint NOT NULL,
   article_id bigint NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (article_id) REFERENCES articles (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
