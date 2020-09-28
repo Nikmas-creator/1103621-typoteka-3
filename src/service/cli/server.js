@@ -13,6 +13,7 @@ const logger = getLogger();
 const expressPinoLogger = require(`express-pino-logger`)({
   logger
 });
+const connectDb = require(`../connect-db`);
 
 const DEFAULT_PORT = 3000;
 
@@ -43,6 +44,7 @@ module.exports = {
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
     await init();
+    await connectDb();
 
     app.listen(port, () => {
       logger.info(`Wait for connections on port ${port}`);
