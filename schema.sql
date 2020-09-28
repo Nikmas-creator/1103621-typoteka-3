@@ -1,6 +1,6 @@
 CREATE DATABASE typoteka WITH
     OWNER = nikmas
-    ENCODING = 'UTF8'
+    ENCODING = 'WIN1251'
     LC_COLLATE = 'C'
     LC_CTYPE = 'C'
     TABLESPACE = pg_default
@@ -35,7 +35,11 @@ CREATE TABLE articles (
 	release_date date NOT NULL,
   announce text NOT NULL,
   wholetext text NOT NULL,
-  picture varchar(100) NOT NULL
+  picture varchar(100) NOT NULL,
+  author_id BIGINT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES users (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 CREATE INDEX users_title_index ON articles (title);
 CREATE INDEX users_release_date_index ON articles (release_date);
